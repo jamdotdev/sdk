@@ -1,0 +1,61 @@
+name: Test and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.15"
+          cache: "yarn"
+
+      - name: Install
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Build
+        run: yarn build
+
+      - name: Lint
+        run: yarn workspaces run lint
+
+  deploy-github-pages:
+    runs-on: ubuntu-latest
+    needs: build-and-lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.15"
+          cache: "yarn"
+
+      # For the mobx example
+      - name: Install
+        run: yarn install --frozen-lockfile --non-interactive
+        working-directory: ./docs/todo-mobx-example
+
+      - name: Build
+        run: yarn build
+        working-directory: ./docs/todo-mobx-example
+      # End mobx example
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
