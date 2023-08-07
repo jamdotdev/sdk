@@ -44,6 +44,13 @@ jobs:
           node-version: "18.15"
           cache: "yarn"
 
+      # Build base package, so links work
+      - name: Install
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Build
+        run: yarn build
+
       # For the mobx example
       - name: Install
         run: yarn install --frozen-lockfile --non-interactive
