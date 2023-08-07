@@ -27,7 +27,7 @@ jobs:
         run: yarn build
 
       - name: Lint
-        run: yarn workspaces run lint
+        run: yarn lint
 
   deploy-github-pages:
     runs-on: ubuntu-latest
