@@ -1,8 +1,10 @@
 import { createOrGetObjectPath } from "./utils";
 
-type SerializablePrimitive = string | number | boolean | null;
+type SerializablePrimitive = string | number | boolean | null | undefined;
 type SerializableArray = Array<Serializable>;
-export interface SerializableObject extends Record<string, Serializable> {}
+export interface SerializableObject
+  extends Record<string | number, Serializable> {}
+
 type Serializable =
   | SerializablePrimitive
   | SerializableArray
