@@ -59,10 +59,13 @@ jobs:
       - name: Build
         run: yarn build
         working-directory: ./docs/todo-mobx-example
+
+      - name: Copy output
+        run: mkdir docs/public/todo-mobx-example && mv docs/todo-mobx-example/dist docs/public/todo-mobx-example
       # End mobx example
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          publish_dir: ./docs/public
