@@ -1,7 +1,7 @@
 import { createOrGetObjectPath } from "./utils";
 
 type SerializablePrimitive = string | number | boolean | null | undefined;
-type SerializableArray = Array<Serializable>;
+type SerializableArray = Serializable[];
 export interface SerializableObject
   extends Record<string | number, Serializable> {}
 
@@ -22,7 +22,7 @@ function getJamExports() {
  *
  * TODO: write an example, and link to docs.
  */
-export function metadata(fn: () => SerializableObject) {
+export function metadata(fn: () => SerializableObject): void {
   const exports = getJamExports();
   exports.metadata = fn;
 }
