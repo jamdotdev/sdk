@@ -61,7 +61,7 @@ jobs:
         working-directory: ./docs/todo-mobx-example
 
       - name: Copy output
-        run: mkdir docs/public/todo-mobx-example && mv docs/todo-mobx-example/dist docs/public/todo-mobx-example
+        run: mv docs/todo-mobx-example/dist docs/public && mv docs/public/dist docs/public/todo-mobx-example
       # End mobx example
 
       - name: Deploy
