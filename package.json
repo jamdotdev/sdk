@@ -2,20 +2,27 @@
   "name": "@jam.dev/sdk",
   "version": "0.0.1",
   "description": "The Jam Library! Supercharge your bug reports.",
-  "main": "dist/index.js",
-  "types": "dist/types/index.d.ts",
   "private": true,
+  "type": "module",
+  "main": "./dist/jamsdk.umd.cjs",
+  "module": "./dist/jamsdk.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/jamsdk.js",
+      "require": "./dist/jamsdk.umd.cjs"
+    }
+  },
   "scripts": {
-    "dev": "webpack --config webpack.config.js -w",
-    "build": "NODE_ENV=production webpack --config webpack.config.js",
-    "format": "prettier --write '{src,typings}/**'",
-    "lint": "eslint './src/**/*'"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {},
   "devDependencies": {
-    "ts-loader": "^9.4.4",
-    "typescript": "^4.6.0",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "@types/node": "^20.4.8",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.5.1"
   }
 }
