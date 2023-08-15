@@ -1,13 +1,26 @@
 {
   "name": "@jam.dev/sdk",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "The Jam SDK! Supercharge your bug reports.",
   "homepage": "https://jam.dev/docs/product-features/dev-tools/jam.metadata",
   "repository": {
     "type": "git",
     "url": "https://github.com/Strawberry-Jam-Manufacturers/sdk.git"
   },
+  "keywords": [
+    "jam.dev",
+    "jamdotdev",
+    "jam",
+    "bug",
+    "reporting",
+    "sdk",
+    "metadata"
+  ],
+  "license": "Apache-2.0",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/jamsdk.umd.cjs",
   "module": "./dist/jamsdk.js",
