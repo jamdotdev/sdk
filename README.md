@@ -1,6 +1,6 @@
 # The Jam SDK
 
-This is the Jam SDK! Supercharge your bugs and attach custom metadata onto every bug filed on your website!
+This is the Jam SDK! Supercharge your bug reports and attach custom metadata onto every bug filed on your website!
 
 ## Getting Started
 
