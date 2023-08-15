@@ -1,8 +1,8 @@
 {
   "name": "@jam.dev/sdk",
   "version": "0.0.1",
-  "description": "The Jam Library! Supercharge your bug reports.",
-  "private": true,
+  "description": "The Jam SDK! Supercharge your bug reports.",
+  "private": false,
   "type": "module",
   "main": "./dist/jamsdk.umd.cjs",
   "module": "./dist/jamsdk.js",
@@ -13,6 +13,9 @@
       "require": "./dist/jamsdk.umd.cjs"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
