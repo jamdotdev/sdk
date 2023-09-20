@@ -18,9 +18,11 @@ function getJamExports() {
 }
 
 /**
- * Call the metadata function in order to set metadata for your app.
+ * The function you pass into this metadata call
+ * should the return custom info that you want
+ * to include in every bug report.
  *
- * TODO: write an example, and link to docs.
+ * Docs here: https://jam.dev/docs/product-features/dev-tools/jam.metadata
  */
 export function metadata(fn: () => SerializableObject): void {
   const exports = getJamExports();
