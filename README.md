@@ -1,13 +1,31 @@
-# The Jam SDK
+<p align="center">
+  <a href="https://jam.dev">
+    <img src="https://storage.googleapis.com/jam-assets/github-repo.png">
+    <a href="https://jam.dev/docs/product-features/dev-tools/jam.metadata"><strong>Jam.dev SDK</strong></a>
+  </a>
+</p>
 
-This is the Jam SDK! Supercharge your bug reports and attach custom metadata onto every bug filed on your website!
+<p align="center">
+  Auto-include custom data in Jam bug reports.
+</p>
 
-## Getting Started
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=umdSWiuuoY0"><strong>Getting started with Jam</strong></a> ·
+  <a href="https://jam.dev/docs/product-features/dev-tools/jam.metadata"><strong>SDK Docs</strong></a> ·
+  <a href="https://jam.dev"><strong>Jam.dev</strong></a>
+</p>
+<br/>
 
-See our [dedicated documentation page](https://jam.dev/docs/product-features/dev-tools/jam.metadata) for detailed instructions!
+---
 
-To see a full code example of how to integrate the Jam SDK into your web app, see the `docs` folder in this repo, and its accompanying [live site](https://strawberry-jam-manufacturers.github.io/sdk/).
+### Jam.dev SDK
 
-## Feedback
+1-line SDK for incorporating custom data such as app state and user ID in bug reports captured with Jam.
 
-We're a small & scrappy team, so we unfortunately can't actively monitor & respond to Github issues, but we do check our inbox all the time. If you have feedback or requests, please email the Jam founders at `hello@jam.dev`!
+Check out the [docs](https://jam.dev/docs/product-features/dev-tools/jam.metadata) to get started.
+
+For a full code example of how to integrate the Jam SDK into your web app, see the `docs` folder in this repo, and its accompanying [live site](https://jamdotdev.github.io/sdk/).
+
+### Feedback
+
+Our goal is to help you debug faster, without having to go back-and-forth to clarify bugs or gather more info. Reach out to the Jam team at hello@jam.dev with feature requests and feedback. The Jam founders are cc'ed there, and would love to hear from you (even just to share what you're building with Jam!).
