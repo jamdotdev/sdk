@@ -1,6 +1,6 @@
 {
   "name": "@jam.dev/sdk",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "The Jam SDK! Supercharge your bug reports.",
   "homepage": "https://jam.dev/docs/product-features/dev-tools/jam.metadata",
   "repository": {
@@ -28,7 +28,8 @@
   "exports": {
     ".": {
       "import": "./dist/jamsdk.js",
-      "require": "./dist/jamsdk.umd.cjs"
+      "require": "./dist/jamsdk.umd.cjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
