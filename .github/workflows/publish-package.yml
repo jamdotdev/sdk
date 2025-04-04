@@ -1,0 +1,124 @@
+name: Publish Package
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  publish:
+    if: ${{ startsWith(github.event.comment.body, '/publish') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if commenter has write access
+        id: check_permissions
+        uses: actions-cool/check-user-permission@v2
+        with:
+          require: "write"
+          username: ${{ github.event.comment.user.login }}
+
+      - name: Fail if user doesn't have permissions
+        if: steps.check_permissions.outputs.require-result != 'true'
+        run: |
+          echo "::error::Only users with write permissions can run this workflow."
+          exit 1
+
+      - name: Extract version type
+        id: version-type
+        run: |
+          COMMENT="${{ github.event.comment.body }}"
+          if [[ "$COMMENT" == "/publish major" ]]; then
+            echo "type=major" >> $GITHUB_OUTPUT
+          elif [[ "$COMMENT" == "/publish minor" ]]; then
+            echo "type=minor" >> $GITHUB_OUTPUT
+          elif [[ "$COMMENT" == "/publish patch" ]]; then
+            echo "type=patch" >> $GITHUB_OUTPUT
+          else
+            echo "Unknown version type. Use '/publish major', '/publish minor', or '/publish patch'"
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.15"
+          cache: "yarn"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Build
+        run: yarn build
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Bump version
+        id: bump-version
+        run: |
+          VERSION_TYPE="${{ steps.version-type.outputs.type }}"
+          yarn version --"$VERSION_TYPE" --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          git add package.json
+          git commit -m "chore: bump version to $NEW_VERSION"
+          git push
+
+      - name: Create tag
+        run: |
+          NEW_VERSION=${{ steps.bump-version.outputs.new_version }}
+          git tag v$NEW_VERSION
+          git push --tags
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.bump-version.outputs.new_version }}
+          release_name: v${{ steps.bump-version.outputs.new_version }}
+          draft: false
+          prerelease: false
+
+      - name: Publish to NPM
+        run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Comment on issue/PR
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = context.issue.number || context.payload.pull_request?.number;
+            if (!issueNumber) {
+              console.log("Could not determine issue/PR number");
+              return;
+            }
+
+            const newVersion = '${{ steps.bump-version.outputs.new_version }}';
+            const releaseUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/releases/tag/v${newVersion}`;
+            const npmUrl = `https://www.npmjs.com/package/@jam.dev/sdk/v/${newVersion}`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: `🎉 Version v${newVersion} has been published!\n\n- [GitHub Release](${releaseUrl})\n- [NPM Package](${npmUrl})`
+            });
