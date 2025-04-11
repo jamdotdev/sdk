@@ -19,11 +19,11 @@ jobs:
         id: version-type
         run: |
           LABELS="${{ toJson(github.event.pull_request.labels.*.name) }}"
-          if echo "$LABELS" | grep -q '"release-major"'; then
+          if echo "$LABELS" | grep -q 'release-major'; then
             echo "type=major" >> $GITHUB_OUTPUT
-          elif echo "$LABELS" | grep -q '"release-minor"'; then
+          elif echo "$LABELS" | grep -q 'release-minor'; then
             echo "type=minor" >> $GITHUB_OUTPUT
-          elif echo "$LABELS" | grep -q '"release-patch"'; then
+          elif echo "$LABELS" | grep -q 'release-patch'; then
             echo "type=patch" >> $GITHUB_OUTPUT
           else
             echo "::error::No valid release label found (release-major, release-minor, release-patch)."
