@@ -8,7 +8,7 @@ on:
       - main
 
 permissions:
-  contents: write # To push version bump commit and tag
+  contents: write 
 
 jobs:
   publish:
@@ -18,12 +18,12 @@ jobs:
       - name: Determine version type from label
         id: version-type
         run: |
-          LABELS="${{ toJson(github.event.pull_request.labels.*.name) }}"
-          if echo "$LABELS" | grep -q 'release-major'; then
+          LABELS='${{ toJson(github.event.pull_request.labels.*.name) }}'
+          if echo $LABELS | jq '.[] | select(. == "release-major")'; then
             echo "type=major" >> $GITHUB_OUTPUT
-          elif echo "$LABELS" | grep -q 'release-minor'; then
+          elif echo $LABELS | jq '.[] | select(. == "release-minor")'; then
             echo "type=minor" >> $GITHUB_OUTPUT
-          elif echo "$LABELS" | grep -q 'release-patch'; then
+          elif echo $LABELS | jq '.[] | select(. == "release-patch")'; then
             echo "type=patch" >> $GITHUB_OUTPUT
           else
             echo "::error::No valid release label found (release-major, release-minor, release-patch)."
@@ -55,8 +55,10 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-      - name: Bump version
+      - name: Tag release
         id: bump-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION_TYPE="${{ steps.version-type.outputs.type }}"
           yarn version --"$VERSION_TYPE" --no-git-tag-version
@@ -64,11 +66,6 @@ jobs:
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
           git add package.json
           git commit -m "chore: bump version to $NEW_VERSION"
-          git push
-
-      - name: Create tag
-        run: |
-          NEW_VERSION=${{ steps.bump-version.outputs.new_version }}
           git tag v$NEW_VERSION
           git push --tags
 
