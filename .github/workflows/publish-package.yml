@@ -19,16 +19,18 @@ jobs:
         id: version-type
         run: |
           LABELS='${{ toJson(github.event.pull_request.labels.*.name) }}'
-          if echo $LABELS | jq '.[] | select(. == "release-major")'; then
-            echo "type=major" >> $GITHUB_OUTPUT
-          elif echo $LABELS | jq '.[] | select(. == "release-minor")'; then
-            echo "type=minor" >> $GITHUB_OUTPUT
-          elif echo $LABELS | jq '.[] | select(. == "release-patch")'; then
-            echo "type=patch" >> $GITHUB_OUTPUT
+          if echo $LABELS | grep -a "release-major"; then
+            VERSION_TYPE="major"
+          elif echo $LABELS | grep -a "release-minor"; then
+            VERSION_TYPE="minor"
+          elif echo $LABELS | grep -a "release-patch"; then
+            VERSION_TYPE="patch"
           else
             echo "::error::No valid release label found (release-major, release-minor, release-patch)."
             exit 1
           fi
+          echo "type=$VERSION_TYPE" >> $GITHUB_OUTPUT
+          echo "Running a $VERSION_TYPE release"
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -67,7 +69,7 @@ jobs:
           git add package.json
           git commit -m "chore: bump version to $NEW_VERSION"
           git tag v$NEW_VERSION
-          git push --tags
+          git push --tags origin main
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
