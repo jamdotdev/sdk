@@ -2,10 +2,10 @@
   "name": "@jam.dev/sdk",
   "version": "0.0.6",
   "description": "The Jam SDK! Supercharge your bug reports.",
-  "homepage": "https://jam.dev/docs/product-features/dev-tools/jam.metadata",
+  "homepage": "https://jam.dev/docs/custom-logs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Strawberry-Jam-Manufacturers/sdk.git"
+    "url": "https://github.com/jamdotdev/sdk.git"
   },
   "keywords": [
     "jam.dev",
