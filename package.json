@@ -1,6 +1,6 @@
 {
   "name": "@jam.dev/sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Jam SDK! Supercharge your bug reports.",
   "homepage": "https://jam.dev/docs/custom-logs",
   "repository": {
