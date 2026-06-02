@@ -22,16 +22,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18.15"
-          cache: "yarn"
+          cache: "npm"
 
       - name: Install
-        run: yarn install --frozen-lockfile --non-interactive
+        run: npm ci
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Lint
-        run: yarn lint
+        run: npm run lint
 
   deploy-github-pages:
     runs-on: ubuntu-latest
@@ -46,22 +46,22 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18.15"
-          cache: "yarn"
+          cache: "npm"
 
       # Build base package, so links work
       - name: Install
-        run: yarn install --frozen-lockfile --non-interactive
+        run: npm ci
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       # For the mobx example
       - name: Install
-        run: yarn install --frozen-lockfile --non-interactive
+        run: npm ci
         working-directory: ./docs/todo-mobx-example
 
       - name: Build
-        run: yarn build
+        run: npm run build
         working-directory: ./docs/todo-mobx-example
 
       - name: Copy output
@@ -126,7 +126,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
-          cache: "yarn"
+          cache: "npm"
           registry-url: "https://registry.npmjs.org"
 
       # npm Trusted Publishing (OIDC) requires npm >= 11.5.1, which is newer
@@ -136,10 +136,10 @@ jobs:
         run: npm install -g npm@latest
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        run: npm ci
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Tag release
         id: bump-version
@@ -147,10 +147,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION_TYPE="${{ steps.version-type.outputs.type }}"
-          yarn version --"$VERSION_TYPE" --no-git-tag-version
+          npm version "$VERSION_TYPE" --no-git-tag-version
           NEW_VERSION=$(node -p "require('./package.json').version")
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-          git add package.json
+          git add package.json package-lock.json
           git commit -m "release: bump version to $NEW_VERSION"
           git tag v$NEW_VERSION
           git push --tags origin main

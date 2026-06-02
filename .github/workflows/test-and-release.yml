@@ -17,13 +17,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18.15"
-          cache: "yarn"
+          cache: "npm"
 
       - name: Install
-        run: yarn install --frozen-lockfile --non-interactive
+        run: npm ci
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Lint
-        run: yarn lint
+        run: npm run lint
